@@ -7,14 +7,14 @@ screen = pygame.display.set_mode((640, 480))
 clock = pygame.time.Clock()
 running = True
 
+word = WordHandler
+verif = VerifyInput
+lett = LetterHandler
+game = GameState
 
-verif = verify_input
-game = game_state
+word_list = word.word_list_loader()
 
-
-word_list = word_list_loader()
-
-random_word = random_word_select(word_list)
+random_word = word.random_word_select(word_list)
 play_field = "_" * len(random_word)
 
 count = 0
@@ -86,8 +86,8 @@ while running:
                 letter = chr(event.key).lower()
                 if verif.was_used(letter, used_letters):
                     continue
-                add_to_used_letters(letter, used_letters)
-                if not is_in_word(letter, random_word):
+                lett.add_to_used_letters(letter, used_letters)
+                if not verif.is_in_word(letter, random_word):
                     count += 1
                     continue
                 play_field = modify_play_field(letter, play_field, random_word)
