@@ -16,16 +16,6 @@ class WordHandler:
 
 
 class VerifyInput:
-    def is_letter(letter):
-        if letter.isalpha():
-            return True
-
-
-    def is_one_char(letter):
-        if len(letter) == 1:
-            return True
-
-
     def was_used(letter, used_letters):
         if letter in used_letters:
             return True
