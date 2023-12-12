@@ -6,10 +6,15 @@ import random
 class WordHandler:
     @staticmethod
     def word_list_loader():
-        with open("mots.txt", "r") as file:
-            word_list = file.read().split("\n")
-            word_list.pop(-1)
-        return word_list
+        for times in range(2):
+            try:
+                with open("mots.txt", "r") as file:
+                    word_list = file.read().split("\n")
+                    word_list.pop(-1)
+                return word_list
+            except FileNotFoundError:
+                with open("mots.txt", "w") as file:
+                    file.write("")
 
     @staticmethod
     def random_word_select(word_list):
@@ -41,7 +46,8 @@ class LetterHandler:
 class GameState:
     @staticmethod
     def lose_state(count):
-        if count == 7:
+        LIFE_LIMIT = 7
+        if count == LIFE_LIMIT:
             return True
 
     @staticmethod

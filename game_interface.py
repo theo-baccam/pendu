@@ -44,7 +44,9 @@ while running:
     solution_center = solution_surface.get_width() / 2
     solution_x, solution_y = 320 - solution_center, 420
 
-    used_letters_surface = used_letters_font.render(" ".join(lett.used_letters), True, foreground)
+    used_letters_surface = used_letters_font.render(
+        " ".join(lett.used_letters), True, foreground
+    )
     used_letters_center = used_letters_surface.get_width() / 2
     used_letters_x, used_letters_y = 320 - used_letters_center, 450
 
