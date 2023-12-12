@@ -18,7 +18,6 @@ random_word = word.random_word_select(word_list)
 play_field = "_" * len(random_word)
 
 count = 0
-used_letters = []
 
 background = (32, 32, 64)
 foreground = (0, 192, 255)
@@ -45,7 +44,7 @@ while running:
     solution_center = solution_surface.get_width() / 2
     solution_x, solution_y = 320 - solution_center, 420
 
-    used_letters_surface = used_letters_font.render(" ".join(used_letters), True, foreground)
+    used_letters_surface = used_letters_font.render(" ".join(lett.used_letters), True, foreground)
     used_letters_center = used_letters_surface.get_width() / 2
     used_letters_x, used_letters_y = 320 - used_letters_center, 450
 
@@ -84,9 +83,9 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key >= pygame.K_a and event.key <= pygame.K_z:
                 letter = chr(event.key).lower()
-                if verif.was_used(letter, used_letters):
+                if verif.was_used(letter):
                     continue
-                lett.add_to_used_letters(letter, used_letters)
+                lett.add_to_used_letters(letter)
                 if not verif.is_in_word(letter, random_word):
                     count += 1
                     continue
