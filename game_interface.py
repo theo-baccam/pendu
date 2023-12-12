@@ -1,5 +1,6 @@
 from game_logic import *
 import pygame
+import os
 
 word = WordHandler
 verif = VerifyInput
@@ -16,7 +17,8 @@ running = True
 
 pygame.font.init()
 
-font_path = "./NotoSansMono-Regular.ttf"
+hangman_directory = os.path.dirname(os.path.abspath(__file__))
+font_path = os.path.join(hangman_directory, "NotoSansMono-Regular.ttf")
 
 MAIN_FONT_SIZE = 20
 MAIN_FONT = pygame.font.Font(font_path, MAIN_FONT_SIZE)
