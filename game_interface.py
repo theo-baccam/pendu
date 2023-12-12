@@ -32,36 +32,43 @@ play_field = "_" * len(word.random_word)
 
 life_count = 0
 
+SCREEN_TOP = 30
+SCREEN_BOTTOM = 450
+HALF_SCREEN_WIDTH = SCREEN_WIDTH / 2
+
+LOSE_SURFACE = MAIN_FONT.render("Perdu!", True, FOREGROUND)
+LOSE_CENTER = LOSE_SURFACE.get_width() / 2
+LOSE_X, LOSE_Y = HALF_SCREEN_WIDTH - LOSE_CENTER, SCREEN_TOP
+
+WIN_SURFACE = MAIN_FONT.render("Gagné!", True, FOREGROUND)
+WIN_CENTER = WIN_SURFACE.get_width() / 2
+WIN_X, WIN_Y = HALF_SCREEN_WIDTH - WIN_CENTER, SCREEN_TOP
+
+solution_surface = MAIN_FONT.render(word.random_word, True, FOREGROUND)
+solution_center = solution_surface.get_width() / 2
+solution_x, solution_y = HALF_SCREEN_WIDTH - solution_center, SCREEN_BOTTOM - 30
+
 while running:
-    lose_surface = MAIN_FONT.render("Perdu!", True, FOREGROUND)
-    lose_center = lose_surface.get_width() / 2
-    lose_x, lose_y = 320 - lose_center, 30
-
-    win_surface = MAIN_FONT.render("Gagné!", True, FOREGROUND)
-    win_center = win_surface.get_width() / 2
-    win_x, win_y = 320 - win_center, 30
-
-    solution_surface = MAIN_FONT.render(word.random_word, True, FOREGROUND)
-    solution_center = solution_surface.get_width() / 2
-    solution_x, solution_y = 320 - solution_center, 420
-
     used_letters_surface = USED_LETTERS_FONT.render(
         " ".join(lett.used_letters), True, FOREGROUND
     )
     used_letters_center = used_letters_surface.get_width() / 2
-    used_letters_x, used_letters_y = 320 - used_letters_center, 450
+    used_letters_x, used_letters_y = (
+        SCREEN_WIDTH / 2 - used_letters_center,
+        SCREEN_BOTTOM,
+    )
 
     life_count_surface = MAIN_FONT.render(f"{life_count}/7", True, FOREGROUND)
-    life_count_x, life_count_y = 550, 30
+    life_count_x, life_count_y = 550, SCREEN_TOP
 
     word_surface = MAIN_FONT.render(play_field, True, FOREGROUND)
     word_center = word_surface.get_width() / 2
-    word_x, word_y = 320 - word_center, 420
+    word_x, word_y = HALF_SCREEN_WIDTH - word_center, SCREEN_BOTTOM - 30
 
     screen.fill(BACKGROUND)
 
     if game.lose_state(life_count):
-        screen.blit(lose_surface, (lose_x, lose_y))
+        screen.blit(LOSE_SURFACE, (LOSE_X, LOSE_Y))
         screen.blit(solution_surface, (solution_x, solution_y))
         screen.blit(used_letters_surface, (used_letters_x, used_letters_y))
         screen.blit(life_count_surface, (life_count_x, life_count_y))
@@ -69,7 +76,7 @@ while running:
         pygame.time.delay(1000)
         running = False
     elif game.win_state(play_field, word.random_word):
-        screen.blit(win_surface, (win_x, win_y))
+        screen.blit(WIN_SURFACE, (WIN_X, WIN_Y))
         screen.blit(solution_surface, (solution_x, solution_y))
         screen.blit(used_letters_surface, (used_letters_x, used_letters_y))
         screen.blit(life_count_surface, (life_count_x, life_count_y))
