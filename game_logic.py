@@ -1,9 +1,10 @@
-import string
+# J'importe que la méthode choice du module random
+from random import choice
 
-import random
 
-
+# Gestion des mots dans la liste
 class WordHandler:
+    # Pour extraire les mots d'un fichier dans une liste.
     @staticmethod
     def word_list_loader():
         for times in range(2):
@@ -12,31 +13,38 @@ class WordHandler:
                     word_list = file.read().split("\n")
                     word_list.pop(-1)
                 return word_list
+            # Créer le fichier si il n'existe pas
             except FileNotFoundError:
                 with open("mots.txt", "w") as file:
                     file.write("")
+
     word_list = word_list_loader()
 
+    # Pour extraire un mot aléaotirement dans la liste de mots
     @staticmethod
     def random_word_select(word_list):
-        random_word = random.choice(word_list)
+        random_word = choice(word_list)
         return random_word
 
     random_word = random_word_select(word_list)
 
 
+# Pour vérifier ce qui fût saisie
 class VerifyInput:
+    # Si la lettre à déjà été utilisé
     @staticmethod
     def was_used(letter):
         if letter in LetterHandler.used_letters:
             return True
 
+    # Si la lettre est dans le mot
     @staticmethod
     def is_in_word(letter, random_word):
         if letter in random_word:
             return True
 
 
+# Pour rajouter les lettres qui fût utilisé dans une liste
 class LetterHandler:
     used_letters = []
 
@@ -46,6 +54,7 @@ class LetterHandler:
         LetterHandler.used_letters.sort()
 
 
+# Sur le résultat de la partie
 class GameState:
     @staticmethod
     def lose_state(count):
@@ -59,6 +68,7 @@ class GameState:
             return True
 
 
+# Pour montrer la lettre si elle est correct.
 def modify_play_field(letter, play_field, random_word):
     for index, character in enumerate(random_word):
         if letter == character:
