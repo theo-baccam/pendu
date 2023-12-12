@@ -15,11 +15,14 @@ class WordHandler:
             except FileNotFoundError:
                 with open("mots.txt", "w") as file:
                     file.write("")
+    word_list = word_list_loader()
 
     @staticmethod
     def random_word_select(word_list):
         random_word = random.choice(word_list)
         return random_word
+
+    random_word = random_word_select(word_list)
 
 
 class VerifyInput:

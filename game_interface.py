@@ -12,10 +12,7 @@ verif = VerifyInput
 lett = LetterHandler
 game = GameState
 
-word_list = word.word_list_loader()
-
-random_word = word.random_word_select(word_list)
-play_field = "_" * len(random_word)
+play_field = "_" * len(word.random_word)
 
 count = 0
 
@@ -40,7 +37,7 @@ while running:
     win_center = win_surface.get_width() / 2
     win_x, win_y = 320 - win_center, 30
 
-    solution_surface = main_font.render(random_word, True, foreground)
+    solution_surface = main_font.render(word.random_word, True, foreground)
     solution_center = solution_surface.get_width() / 2
     solution_x, solution_y = 320 - solution_center, 420
 
@@ -67,7 +64,7 @@ while running:
         pygame.display.flip()
         pygame.time.delay(1000)
         running = False
-    elif game.win_state(play_field, random_word):
+    elif game.win_state(play_field, word.random_word):
         screen.blit(win_surface, (win_x, win_y))
         screen.blit(solution_surface, (solution_x, solution_y))
         screen.blit(used_letters_surface, (used_letters_x, used_letters_y))
@@ -88,9 +85,9 @@ while running:
                 if verif.was_used(letter):
                     continue
                 lett.add_to_used_letters(letter)
-                if not verif.is_in_word(letter, random_word):
+                if not verif.is_in_word(letter, word.random_word):
                     count += 1
                     continue
-                play_field = modify_play_field(letter, play_field, random_word)
+                play_field = modify_play_field(letter, play_field, word.random_word)
 
 pygame.quit()
