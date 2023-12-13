@@ -67,10 +67,12 @@ class GameState:
         if play_field == random_word:
             return True
 
-
 # Pour montrer la lettre si elle est correct.
-def modify_play_field(letter, play_field, random_word):
-    for index, character in enumerate(random_word):
-        if letter == character:
-            play_field = play_field[:index] + letter + play_field[index + 1 :]
-    return play_field
+class PlayField:
+    def __init__(self):
+        self.play_field = "_" * len(WordHandler.random_word)
+
+    def modify_play_field(self, letter, random_word):
+        for index, character in enumerate(random_word):
+            if letter == character:
+                self.play_field = self.play_field[:index] + letter + self.play_field[index + 1 :]

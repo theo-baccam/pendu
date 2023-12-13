@@ -40,8 +40,6 @@ USED_LETTERS_FONT = pygame.font.Font(font_path, USED_LETTERS_FONT_SIZE)
 BACKGROUND = (32, 32, 64)
 FOREGROUND = (0, 192, 255)
 
-play_field = "_" * len(word.random_word)
-
 # Le nombre de "membres"
 life_count = 0
 
@@ -123,13 +121,16 @@ image_list = (
 )
 
 
+play_field_instance = PlayField()
+
+
 # Boucle principale pygame
 while running:
     # Puisque les valeurs changent, l'emplacement de
     # ces éléments de l'UI sont dans la boucle.
     life_count_surface = MAIN_FONT.render(f"{life_count}/7", True, FOREGROUND)
 
-    word_surface = MAIN_FONT.render(play_field, True, FOREGROUND)
+    word_surface = MAIN_FONT.render(play_field_instance.play_field, True, FOREGROUND)
 
     used_letters_surface = USED_LETTERS_FONT.render(
         " ".join(lett.used_letters), True, FOREGROUND
@@ -142,7 +143,7 @@ while running:
     # Si la partie est finie, afficher l'écran approprié
     if game.lose_state(life_count):
         running = render_lose_screen(LOSE_SURFACE)
-    elif game.win_state(play_field, word.random_word):
+    elif game.win_state(play_field_instance.play_field, word.random_word): #
         running = render_win_screen(WIN_SURFACE)
 
     # Mettre à jour l'écran
@@ -175,7 +176,6 @@ while running:
             life_count += 1
             continue
 
-        # Mettre les nouvelles lettres entrés par l'utilisateur
-        play_field = modify_play_field(letter, play_field, word.random_word)
+        play_field_instance.modify_play_field(letter, word.random_word)
 
 pygame.quit()
