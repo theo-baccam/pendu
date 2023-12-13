@@ -49,6 +49,7 @@ life_count = 0
 SCREEN_TOP = 30
 SCREEN_BOTTOM = 450
 HALF_SCREEN_WIDTH = SCREEN_WIDTH / 2
+HALF_SCREEN_HEIGHT = SCREEN_HEIGHT / 2
 
 # Les emplacements des surfaces pour le texte game-over et win.
 LOSE_SURFACE = MAIN_FONT.render("Perdu!", True, FOREGROUND)
@@ -67,7 +68,7 @@ def render_lose_screen(LOSE_SURFACE):
     screen.blit(LOSE_SURFACE, (LOSE_X, LOSE_Y))
     screen.blit(solution_surface, (solution_x, solution_y))
     pygame.display.flip()
-    pygame.time.delay(1000)
+    pygame.time.delay(3000)
     return False
 
 
@@ -78,12 +79,12 @@ def render_win_screen(WIN_SURFACE):
     screen.blit(WIN_SURFACE, (WIN_X, WIN_Y))
     screen.blit(solution_surface, (solution_x, solution_y))
     pygame.display.flip()
-    pygame.time.delay(1000)
+    pygame.time.delay(3000)
     return False
 
 
 # Fonction pour afficher l'interface principale
-def render_main_ui(word_surface, life_count_surface, used_letters_surface):
+def render_main_ui(word_surface, life_count_surface, used_letters_surface, image_list, life_count):
     word_center = word_surface.get_width() / 2
     word_x, word_y = HALF_SCREEN_WIDTH - word_center, SCREEN_BOTTOM - 30
     screen.blit(word_surface, (word_x, word_y))
@@ -100,6 +101,27 @@ def render_main_ui(word_surface, life_count_surface, used_letters_surface):
     )
     screen.blit(used_letters_surface, (used_letters_x, used_letters_y))
 
+    hangman_center_x, hangman_center_y = (
+        image_list[life_count].get_width() / 2,
+        image_list[life_count].get_height() / 2
+    )
+    hangman_x, hangman_y = (
+        HALF_SCREEN_WIDTH - hangman_center_x,
+        HALF_SCREEN_HEIGHT - hangman_center_y
+    )
+    screen.blit(image_list[life_count], (hangman_x, hangman_y))
+
+image_list = (
+    pygame.image.load(os.path.join("images", "hangman_0.png")),
+    pygame.image.load(os.path.join("images", "hangman_1.png")),
+    pygame.image.load(os.path.join("images", "hangman_2.png")),
+    pygame.image.load(os.path.join("images", "hangman_3.png")),
+    pygame.image.load(os.path.join("images", "hangman_4.png")),
+    pygame.image.load(os.path.join("images", "hangman_5.png")),
+    pygame.image.load(os.path.join("images", "hangman_6.png")),
+    pygame.image.load(os.path.join("images", "hangman_7.png")),
+)
+
 
 # Boucle principale pygame
 while running:
@@ -115,7 +137,7 @@ while running:
 
     # Pour dessiner le fond et l'ui principale
     screen.fill(BACKGROUND)
-    render_main_ui(word_surface, life_count_surface, used_letters_surface)
+    render_main_ui(word_surface, life_count_surface, used_letters_surface, image_list, life_count)
 
     # Si la partie est finie, afficher l'écran approprié
     if game.lose_state(life_count):
