@@ -1,80 +1,57 @@
 # J'importe que la méthode choice du module random
 from random import choice
 
+class HangmanLogic:
+    def __init__(self):
+        self.word_list = self.word_list_loader()
+        self.random_word = self.random_word_select()
+        self.play_field = "_" * len(self.random_word)
+        self.life_count = 0
+        self.used_letters = []
 
-# Gestion des mots dans la liste
-class WordHandler:
-    # Pour extraire les mots d'un fichier dans une liste.
-    @staticmethod
-    def word_list_loader():
+
+    def word_list_loader(self):
         for times in range(2):
             try:
                 with open("mots.txt", "r") as file:
-                    word_list = file.read().split("\n")
-                    word_list.pop(-1)
-                return word_list
-            # Créer le fichier si il n'existe pas
+                    return file.read().split("\n")[:-1]
             except FileNotFoundError:
                 with open("mots.txt", "w") as file:
                     file.write("")
-
-    word_list = word_list_loader()
-
-    # Pour extraire un mot aléaotirement dans la liste de mots
-    @staticmethod
-    def random_word_select(word_list):
-        random_word = choice(word_list)
-        return random_word
-
-    random_word = random_word_select(word_list)
+                    return []
 
 
-# Pour vérifier ce qui fût saisie
-class VerifyInput:
-    # Si la lettre à déjà été utilisé
-    @staticmethod
-    def was_used(letter):
-        if letter in LetterHandler.used_letters:
-            return True
+    def random_word_select(self):
+        return choice(self.word_list)
 
-    # Si la lettre est dans le mot
-    @staticmethod
-    def is_in_word(letter, random_word):
-        if letter in random_word:
+
+    def was_used(self, letter):
+        if letter in self.used_letters:
             return True
 
 
-# Pour rajouter les lettres qui fût utilisé dans une liste
-class LetterHandler:
-    used_letters = []
-
-    @staticmethod
-    def add_to_used_letters(letter):
-        LetterHandler.used_letters.append(letter)
-        LetterHandler.used_letters.sort()
+    def is_in_word(self, letter):
+        if letter in self.random_word:
+            return True
 
 
-# Sur le résultat de la partie
-class GameState:
-    @staticmethod
-    def lose_state(count):
+    def add_to_used_letters(self, letter):
+        self.used_letters.append(letter)
+        self.used_letters.sort()
+
+
+    def lose_state(self):
         LIFE_LIMIT = 7
-        if count == LIFE_LIMIT:
+        if self.life_count == LIFE_LIMIT:
             return True
 
-    @staticmethod
-    def win_state(play_field, random_word):
-        if play_field == random_word:
+
+    def win_state(self):
+        if self.play_field == self.random_word:
             return True
 
-# Pour montrer la lettre si elle est correct.
-class ChangingVariables:
-    def __init__(self):
-        self.play_field = "_" * len(WordHandler.random_word)
-        self.life_count = 0
-
-    def modify_play_field(self, letter, random_word):
-        for index, character in enumerate(random_word):
+    def modify_play_field(self, letter):
+        for index, character in enumerate(self.random_word):
             if letter == character:
                 self.play_field = self.play_field[:index] + letter + self.play_field[index + 1 :]
 
