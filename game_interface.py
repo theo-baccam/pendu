@@ -12,6 +12,7 @@ word = WordHandler
 verif = VerifyInput
 lett = LetterHandler
 game = GameState
+cv = ChangingVariables()
 
 pygame.init()
 
@@ -39,9 +40,6 @@ USED_LETTERS_FONT = pygame.font.Font(font_path, USED_LETTERS_FONT_SIZE)
 # Les valeurs des couleurs en RGB
 BACKGROUND = (32, 32, 64)
 FOREGROUND = (0, 192, 255)
-
-# Le nombre de "membres"
-life_count = 0
 
 # Constants pour des emplacements sur la fenêtre
 SCREEN_TOP = 30
@@ -100,14 +98,14 @@ def render_main_ui(word_surface, life_count_surface, used_letters_surface, image
     screen.blit(used_letters_surface, (used_letters_x, used_letters_y))
 
     hangman_center_x, hangman_center_y = (
-        image_list[life_count].get_width() / 2,
-        image_list[life_count].get_height() / 2
+        image_list[cv.life_count].get_width() / 2,
+        image_list[cv.life_count].get_height() / 2
     )
     hangman_x, hangman_y = (
         HALF_SCREEN_WIDTH - hangman_center_x,
         HALF_SCREEN_HEIGHT - hangman_center_y
     )
-    screen.blit(image_list[life_count], (hangman_x, hangman_y))
+    screen.blit(image_list[cv.life_count], (hangman_x, hangman_y))
 
 image_list = (
     pygame.image.load(os.path.join("images", "hangman_0.png")),
@@ -121,16 +119,14 @@ image_list = (
 )
 
 
-play_field_instance = PlayField()
-
 
 # Boucle principale pygame
 while running:
     # Puisque les valeurs changent, l'emplacement de
     # ces éléments de l'UI sont dans la boucle.
-    life_count_surface = MAIN_FONT.render(f"{life_count}/7", True, FOREGROUND)
+    life_count_surface = MAIN_FONT.render(f"{cv.life_count}/7", True, FOREGROUND)
 
-    word_surface = MAIN_FONT.render(play_field_instance.play_field, True, FOREGROUND)
+    word_surface = MAIN_FONT.render(cv.play_field, True, FOREGROUND)
 
     used_letters_surface = USED_LETTERS_FONT.render(
         " ".join(lett.used_letters), True, FOREGROUND
@@ -138,12 +134,12 @@ while running:
 
     # Pour dessiner le fond et l'ui principale
     screen.fill(BACKGROUND)
-    render_main_ui(word_surface, life_count_surface, used_letters_surface, image_list, life_count)
+    render_main_ui(word_surface, life_count_surface, used_letters_surface, image_list, cv.life_count)
 
     # Si la partie est finie, afficher l'écran approprié
-    if game.lose_state(life_count):
+    if game.lose_state(cv.life_count):
         running = render_lose_screen(LOSE_SURFACE)
-    elif game.win_state(play_field_instance.play_field, word.random_word): #
+    elif game.win_state(cv.play_field, word.random_word): #
         running = render_win_screen(WIN_SURFACE)
 
     # Mettre à jour l'écran
@@ -173,9 +169,9 @@ while running:
 
         # Si la lettre n'est pas dans le mot, rajouter un "membre" au pendu.
         if not verif.is_in_word(letter, word.random_word):
-            life_count += 1
+            cv.add_to_life_count()
             continue
 
-        play_field_instance.modify_play_field(letter, word.random_word)
+        cv.modify_play_field(letter, word.random_word)
 
 pygame.quit()

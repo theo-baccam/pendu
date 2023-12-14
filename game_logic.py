@@ -68,11 +68,15 @@ class GameState:
             return True
 
 # Pour montrer la lettre si elle est correct.
-class PlayField:
+class ChangingVariables:
     def __init__(self):
         self.play_field = "_" * len(WordHandler.random_word)
+        self.life_count = 0
 
     def modify_play_field(self, letter, random_word):
         for index, character in enumerate(random_word):
             if letter == character:
                 self.play_field = self.play_field[:index] + letter + self.play_field[index + 1 :]
+
+    def add_to_life_count(self):
+        self.life_count += 1
