@@ -4,30 +4,29 @@ import os
 
 hl = HangmanLogic()
 
+
 class HangmanDisplay:
     def __init__(self):
         pygame.init()
         self.SCREEN_WIDTH = 640
         self.SCREEN_HEIGHT = 480
-        self.screen = (
-            pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
-        )
+        self.screen = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.running = True
 
         pygame.font.init()
 
         self.hangman_directory = os.path.dirname(os.path.abspath(__file__))
-        self.font_path = (
-            os.path.join(self.hangman_directory, "NotoSansMono-Regular.ttf")
+        self.font_path = os.path.join(
+            self.hangman_directory, "NotoSansMono-Regular.ttf"
         )
 
         self.MAIN_FONT_SIZE = 20
         self.MAIN_FONT = pygame.font.Font(self.font_path, self.MAIN_FONT_SIZE)
 
         self.USED_LETTERS_FONT_SIZE = 15
-        self.USED_LETTERS_FONT = (
-            pygame.font.Font(self.font_path, self.USED_LETTERS_FONT_SIZE)
+        self.USED_LETTERS_FONT = pygame.font.Font(
+            self.font_path, self.USED_LETTERS_FONT_SIZE
         )
 
         self.BACKGROUND = (32, 32, 64)
@@ -38,16 +37,12 @@ class HangmanDisplay:
         self.HALF_SCREEN_WIDTH = self.SCREEN_WIDTH / 2
         self.HALF_SCREEN_HEIGHT = self.SCREEN_HEIGHT / 2
 
-        self.LOSE_SURFACE = (
-            self.MAIN_FONT.render("Perdu!", True, self.FOREGROUND)
-        )
+        self.LOSE_SURFACE = self.MAIN_FONT.render("Perdu!", True, self.FOREGROUND)
 
-        self.WIN_SURFACE = (
-            self.MAIN_FONT.render("Gagné!", True, self.FOREGROUND)
-        )
+        self.WIN_SURFACE = self.MAIN_FONT.render("Gagné!", True, self.FOREGROUND)
 
-        self.solution_surface = (
-            self.MAIN_FONT.render(hl.random_word, True, self.FOREGROUND)
+        self.solution_surface = self.MAIN_FONT.render(
+            hl.random_word, True, self.FOREGROUND
         )
         self.solution_center = self.solution_surface.get_width() / 2
         self.solution_x, self.solution_y = (
@@ -66,31 +61,24 @@ class HangmanDisplay:
             pygame.image.load(os.path.join("images", "hangman_7.png")),
         )
 
-
     def render_lose_screen(self):
         LOSE_CENTER = self.LOSE_SURFACE.get_width() / 2
-        LOSE_X, LOSE_Y = (
-            self.HALF_SCREEN_WIDTH - LOSE_CENTER, self.SCREEN_TOP
-        )
+        LOSE_X, LOSE_Y = (self.HALF_SCREEN_WIDTH - LOSE_CENTER, self.SCREEN_TOP)
         self.screen.blit(self.LOSE_SURFACE, (LOSE_X, LOSE_Y))
         self.screen.blit(self.solution_surface, (self.solution_x, self.solution_y))
         pygame.display.flip()
         pygame.time.delay(3000)
         return False
 
-
     # Fonction pour afficher l'écran win.
     def render_win_screen(self):
         WIN_CENTER = self.WIN_SURFACE.get_width() / 2
-        WIN_X, WIN_Y = (
-            self.HALF_SCREEN_WIDTH - WIN_CENTER, self.SCREEN_TOP
-        )
+        WIN_X, WIN_Y = (self.HALF_SCREEN_WIDTH - WIN_CENTER, self.SCREEN_TOP)
         self.screen.blit(self.WIN_SURFACE, (WIN_X, WIN_Y))
         self.screen.blit(self.solution_surface, (self.solution_x, self.solution_y))
         pygame.display.flip()
         pygame.time.delay(3000)
         return False
-
 
     # Fonction pour afficher l'interface principale
     def render_main_ui(
@@ -98,12 +86,11 @@ class HangmanDisplay:
         word_surface,
         life_count_surface,
         used_letters_surface,
-        image_list, life_count,
-        ):
+        image_list,
+        life_count,
+    ):
         word_center = word_surface.get_width() / 2
-        word_x, word_y = (
-            self.HALF_SCREEN_WIDTH - word_center, self.SCREEN_BOTTOM - 30
-        )
+        word_x, word_y = (self.HALF_SCREEN_WIDTH - word_center, self.SCREEN_BOTTOM - 30)
         self.screen.blit(word_surface, (word_x, word_y))
 
         # Le compteur de vie
@@ -120,11 +107,11 @@ class HangmanDisplay:
 
         hangman_center_x, hangman_center_y = (
             self.image_list[hl.life_count].get_width() / 2,
-            self.image_list[hl.life_count].get_height() / 2
+            self.image_list[hl.life_count].get_height() / 2,
         )
         hangman_x, hangman_y = (
             self.HALF_SCREEN_WIDTH - hangman_center_x,
-            self.HALF_SCREEN_HEIGHT - hangman_center_y
+            self.HALF_SCREEN_HEIGHT - hangman_center_y,
         )
         self.screen.blit(self.image_list[hl.life_count], (hangman_x, hangman_y))
 
@@ -133,8 +120,8 @@ class HangmanDisplay:
         while self.running:
             # Puisque les valeurs changent, l'emplacement de
             # ces éléments de l'UI sont dans la boucle.
-            life_count_surface = (
-                self.MAIN_FONT.render(f"{hl.life_count}/7", True, self.FOREGROUND)
+            life_count_surface = self.MAIN_FONT.render(
+                f"{hl.life_count}/7", True, self.FOREGROUND
             )
 
             word_surface = self.MAIN_FONT.render(hl.play_field, True, self.FOREGROUND)
@@ -149,8 +136,8 @@ class HangmanDisplay:
                 word_surface,
                 life_count_surface,
                 used_letters_surface,
-                self.image_list, 
-                hl.life_count
+                self.image_list,
+                hl.life_count,
             )
 
             # Si la partie est finie, afficher l'écran approprié
