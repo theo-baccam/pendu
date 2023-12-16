@@ -1,47 +1,48 @@
+# main.py
 import pygame
 import os
 from game_logic import HangmanLogic
 from game_interface import HangmanDisplay
 
+pygame.init()
+SCREEN_WIDTH = 640
+SCREEN_HEIGHT = 480
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+clock = pygame.time.Clock()
+
+pygame.font.init()
+
+hangman_directory = os.path.dirname(os.path.abspath(__file__))
+font_path = os.path.join(hangman_directory, "NotoSansMono-Regular.ttf")
+
+MAIN_FONT_SIZE = 20
+MAIN_FONT = pygame.font.Font(font_path, MAIN_FONT_SIZE)
+
+USED_LETTERS_FONT_SIZE = 15
+USED_LETTERS_FONT = pygame.font.Font(font_path, USED_LETTERS_FONT_SIZE)
+
+BACKGROUND = (32, 32, 64)
+FOREGROUND = (0, 192, 255)
+
+SCREEN_TOP = 30
+SCREEN_BOTTOM = 450
+HALF_SCREEN_WIDTH = SCREEN_WIDTH / 2
+HALF_SCREEN_HEIGHT = SCREEN_HEIGHT / 2
+
+hl = HangmanLogic()
+random_word = hl.random_word
+hd = HangmanDisplay(
+    MAIN_FONT,
+    FOREGROUND,
+    HALF_SCREEN_WIDTH,
+    SCREEN_BOTTOM,
+    hangman_directory,
+    random_word,
+    hl,
+)
 
 def main():
-    pygame.init()
-    SCREEN_WIDTH = 640
-    SCREEN_HEIGHT = 480
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    clock = pygame.time.Clock()
     running = True
-
-    pygame.font.init()
-
-    hangman_directory = os.path.dirname(os.path.abspath(__file__))
-    font_path = os.path.join(hangman_directory, "NotoSansMono-Regular.ttf")
-
-    MAIN_FONT_SIZE = 20
-    MAIN_FONT = pygame.font.Font(font_path, MAIN_FONT_SIZE)
-
-    USED_LETTERS_FONT_SIZE = 15
-    USED_LETTERS_FONT = pygame.font.Font(font_path, USED_LETTERS_FONT_SIZE)
-
-    BACKGROUND = (32, 32, 64)
-    FOREGROUND = (0, 192, 255)
-
-    SCREEN_TOP = 30
-    SCREEN_BOTTOM = 450
-    HALF_SCREEN_WIDTH = SCREEN_WIDTH / 2
-    HALF_SCREEN_HEIGHT = SCREEN_HEIGHT / 2
-
-    hl = HangmanLogic()
-    random_word = hl.random_word
-    hd = HangmanDisplay(
-        MAIN_FONT,
-        FOREGROUND,
-        HALF_SCREEN_WIDTH,
-        SCREEN_BOTTOM,
-        hangman_directory,
-        random_word,
-    )
-    # Boucle principale pygame
     while running:
         # Puisque les valeurs changent, l'emplacement de
         # ces éléments de l'UI sont dans la boucle.

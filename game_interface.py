@@ -1,3 +1,4 @@
+# game_interface.py
 from game_logic import HangmanLogic
 import pygame
 import os
@@ -12,8 +13,9 @@ class HangmanDisplay:
         SCREEN_BOTTOM,
         hangman_directory,
         random_word,
+        hangman_logic_instance,
     ):
-        self.hl = HangmanLogic()
+        self.hl = hangman_logic_instance
         self.LOSE_SURFACE = MAIN_FONT.render("Perdu!", True, FOREGROUND)
 
         self.WIN_SURFACE = MAIN_FONT.render("Gagné!", True, FOREGROUND)

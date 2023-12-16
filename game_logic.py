@@ -1,3 +1,4 @@
+# game_logic.py
 # J'importe que la méthode choice du module random
 from random import choice
 
