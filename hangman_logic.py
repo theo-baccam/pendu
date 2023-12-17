@@ -1,10 +1,12 @@
 # game_logic.py
 # J'importe que la méthode choice du module random
 from random import choice
+import os
 
 
 class HangmanLogic:
-    def __init__(self):
+    def __init__(self, hangman_directory):
+        self.word_file = os.path.join(hangman_directory, "mots.txt")
         self.word_list = self.word_list_loader()
         self.random_word = self.random_word_select()
         self.play_field = "_" * len(self.random_word)
@@ -14,10 +16,10 @@ class HangmanLogic:
     def word_list_loader(self):
         for times in range(2):
             try:
-                with open("mots.txt", "r") as file:
+                with open(self.word_file, "r") as file:
                     return file.read().split("\n")[:-1]
             except FileNotFoundError:
-                with open("mots.txt", "w") as file:
+                with open(self.word_file, "w") as file:
                     file.write("")
                     return []
 

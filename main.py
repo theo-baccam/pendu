@@ -1,8 +1,11 @@
 # main.py
 import pygame
 import os
-from game_logic import HangmanLogic
-from game_interface import HangmanDisplay
+from start_menu import StartMenu
+from hangman_logic import HangmanLogic
+from hangman_display import HangmanDisplay
+from add_word import AddWord
+
 
 pygame.init()
 SCREEN_WIDTH = 640
@@ -29,7 +32,8 @@ SCREEN_BOTTOM = 450
 HALF_SCREEN_WIDTH = SCREEN_WIDTH / 2
 HALF_SCREEN_HEIGHT = SCREEN_HEIGHT / 2
 
-hl = HangmanLogic()
+sm = StartMenu(MAIN_FONT, FOREGROUND, HALF_SCREEN_WIDTH)
+hl = HangmanLogic(hangman_directory)
 random_word = hl.random_word
 hd = HangmanDisplay(
     MAIN_FONT,
@@ -41,9 +45,8 @@ hd = HangmanDisplay(
     hl,
 )
 
-def main():
-    running = True
-    while running:
+def hangman_play():
+    while True:
         # Puisque les valeurs changent, l'emplacement de
         # ces éléments de l'UI sont dans la boucle.
         life_count_surface = MAIN_FONT.render(f"{hl.life_count}/7", True, FOREGROUND)
@@ -72,9 +75,11 @@ def main():
 
         # Si la partie est finie, afficher l'écran approprié
         if hl.lose_state():
-            running = hd.render_lose_screen(screen, HALF_SCREEN_WIDTH, SCREEN_TOP)
+            hd.render_lose_screen(screen, HALF_SCREEN_WIDTH, SCREEN_TOP)
+            break
         elif hl.win_state():
-            running = hd.render_win_screen(screen, HALF_SCREEN_WIDTH, SCREEN_TOP)
+            hd.render_win_screen(screen, HALF_SCREEN_WIDTH, SCREEN_TOP)
+            break
 
         # Mettre à jour l'écran
         pygame.display.flip()
@@ -108,8 +113,57 @@ def main():
 
             hl.modify_play_field(letter)
 
+def hangman_add():
+    aw = AddWord(hangman_directory)
+    done = False
+    while not done:
+        screen.fill(BACKGROUND)
+        aw.render_text_field(
+            screen,
+            MAIN_FONT,
+            FOREGROUND,
+            HALF_SCREEN_WIDTH,
+            HALF_SCREEN_HEIGHT
+        )
+        pygame.display.flip()
+        for event in pygame.event.get():
+            if event.type != pygame.KEYDOWN:
+                continue
+            if event.key == pygame.K_RETURN:
+                aw.word_list_append()
+                done = True
+            if event.key == pygame.K_BACKSPACE:
+                aw.return_text()
+            if event.key >= pygame.K_a and event.key <= pygame.K_z:
+                letter = chr(event.key).lower()
+                aw.append_to_text(letter)
+
+
+def hangman_quit():
     pygame.quit()
+
+def main():
+    selection = 0
+    confirm_selection = [
+        hangman_play,
+        hangman_add,
+        hangman_quit,
+    ]
+    while True:
+        screen.fill(BACKGROUND)
+        sm.display_menu(screen, MAIN_FONT, FOREGROUND, HALF_SCREEN_WIDTH, selection)
+        pygame.display.flip()
+        for event in pygame.event.get():
+            if event.type != pygame.KEYDOWN:
+                continue
+            if event.key == pygame.K_UP:
+                selection = (selection + 3 - 1) % 3 
+            elif event.key == pygame.K_DOWN:
+                selection = (selection + 3 + 1) % 3
+            elif event.key == pygame.K_RETURN:
+                confirm_selection[selection]()
 
 
 if __name__ == "__main__":
+    # RE-ADD TRY AND EXCEPT
     main()

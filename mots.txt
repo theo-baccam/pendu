@@ -26,3 +26,6 @@ motivation
 trouver
 tableau
 rendu
+exclusion
+pourcentage
+insouciant

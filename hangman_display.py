@@ -1,5 +1,5 @@
 # game_interface.py
-from game_logic import HangmanLogic
+from hangman_logic import HangmanLogic
 import pygame
 import os
 
