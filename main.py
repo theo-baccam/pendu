@@ -92,7 +92,7 @@ def hangman_play():
             if event.type != pygame.KEYDOWN:
                 continue
 
-            if event.key == pygame.K_BACKSPACE or event.key == pygame.K_ESCAPE:
+            if event.key == pygame.K_ESCAPE:
                 running = False
 
             if not (pygame.K_a <= event.key <= pygame.K_z):
@@ -116,11 +116,12 @@ def hangman_play():
                 continue
 
             hl.modify_play_field(letter)
+    return True
 
 def hangman_add():
     aw = AddWord(hangman_directory)
-    done = False
-    while not done:
+    running = True
+    while running:
         screen.fill(BACKGROUND)
         aw.render_text_field(
             screen,
@@ -133,19 +134,21 @@ def hangman_add():
         for event in pygame.event.get():
             if event.type != pygame.KEYDOWN:
                 continue
+            if event.key == pygame.K_ESCAPE:
+                running = False
             if event.key == pygame.K_RETURN:
                 aw.word_list_append()
-                done = True
             if event.key == pygame.K_BACKSPACE:
                 aw.return_text()
             if not (pygame.K_a <= event.key <= pygame.K_z):
                 continue
             letter = chr(event.key).lower()
             aw.append_to_text(letter)
+    return True
 
 
 def hangman_quit():
-    pygame.quit()
+    return False
 
 def main():
     selection = 0
@@ -154,7 +157,8 @@ def main():
         hangman_add,
         hangman_quit,
     ]
-    while True:
+    running = True
+    while running:
         screen.fill(BACKGROUND)
         sm.display_menu(screen, MAIN_FONT, FOREGROUND, HALF_SCREEN_WIDTH, selection)
         pygame.display.flip()
@@ -166,9 +170,14 @@ def main():
             elif event.key == pygame.K_DOWN:
                 selection = (selection + 3 + 1) % 3
             elif event.key == pygame.K_RETURN:
-                confirm_selection[selection]()
+                running = confirm_selection[selection]()
+            elif event.key == pygame.K_ESCAPE:
+                running = False
 
 
 if __name__ == "__main__":
-    # RE-ADD TRY AND EXCEPT
-    main()
+    try:
+        main()
+        pygame.quit()
+    except Exception as e:
+        print(e)
