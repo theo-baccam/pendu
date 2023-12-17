@@ -46,6 +46,14 @@ hd = HangmanDisplay(
 )
 
 def hangman_play():
+    invalid_keys = [
+        pygame.K_LEFT,
+        pygame.K_RIGHT,
+        pygame.K_UP,
+        pygame.K_DOWN,
+        pygame.K_LSHIFT,
+        pygame.K_RSHIFT,
+    ]
     while True:
         # Puisque les valeurs changent, l'emplacement de
         # ces éléments de l'UI sont dans la boucle.
@@ -91,10 +99,12 @@ def hangman_play():
             if event.type != pygame.KEYDOWN:
                 continue
 
-            if not event.key >= pygame.K_a and event.key <= pygame.K_z:
+            if not (pygame.K_a <= event.key <= pygame.K_z):
                 # Si ce n'est pas une touche lettre, revenir au début
                 continue
-
+           
+            print(event.key)
+            print(pygame.K_a, pygame.K_z)
             # chr pour spécifier la lettre correspondant à la touche
             # puis la mettre en minuscule
             letter = chr(event.key).lower()
@@ -134,9 +144,10 @@ def hangman_add():
                 done = True
             if event.key == pygame.K_BACKSPACE:
                 aw.return_text()
-            if event.key >= pygame.K_a and event.key <= pygame.K_z:
-                letter = chr(event.key).lower()
-                aw.append_to_text(letter)
+            if not (pygame.K_a <= event.key <= pygame.K_z):
+                continue
+            letter = chr(event.key).lower()
+            aw.append_to_text(letter)
 
 
 def hangman_quit():
