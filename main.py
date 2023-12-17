@@ -33,28 +33,21 @@ HALF_SCREEN_WIDTH = SCREEN_WIDTH / 2
 HALF_SCREEN_HEIGHT = SCREEN_HEIGHT / 2
 
 sm = StartMenu(MAIN_FONT, FOREGROUND, HALF_SCREEN_WIDTH)
-hl = HangmanLogic(hangman_directory)
-random_word = hl.random_word
-hd = HangmanDisplay(
-    MAIN_FONT,
-    FOREGROUND,
-    HALF_SCREEN_WIDTH,
-    SCREEN_BOTTOM,
-    hangman_directory,
-    random_word,
-    hl,
-)
 
 def hangman_play():
-    invalid_keys = [
-        pygame.K_LEFT,
-        pygame.K_RIGHT,
-        pygame.K_UP,
-        pygame.K_DOWN,
-        pygame.K_LSHIFT,
-        pygame.K_RSHIFT,
-    ]
-    while True:
+    hl = HangmanLogic(hangman_directory)
+    random_word = hl.random_word
+    hd = HangmanDisplay(
+        MAIN_FONT,
+        FOREGROUND,
+        HALF_SCREEN_WIDTH,
+        SCREEN_BOTTOM,
+        hangman_directory,
+        random_word,
+        hl,
+    )
+    running = True
+    while running:
         # Puisque les valeurs changent, l'emplacement de
         # ces éléments de l'UI sont dans la boucle.
         life_count_surface = MAIN_FONT.render(f"{hl.life_count}/7", True, FOREGROUND)
@@ -84,10 +77,10 @@ def hangman_play():
         # Si la partie est finie, afficher l'écran approprié
         if hl.lose_state():
             hd.render_lose_screen(screen, HALF_SCREEN_WIDTH, SCREEN_TOP)
-            break
+            running = False
         elif hl.win_state():
             hd.render_win_screen(screen, HALF_SCREEN_WIDTH, SCREEN_TOP)
-            break
+            running = False
 
         # Mettre à jour l'écran
         pygame.display.flip()
@@ -99,12 +92,13 @@ def hangman_play():
             if event.type != pygame.KEYDOWN:
                 continue
 
+            if event.type == pygame.K_BACKSPACE or event.type == pygame.K_ESCAPE:
+                running = False
+
             if not (pygame.K_a <= event.key <= pygame.K_z):
                 # Si ce n'est pas une touche lettre, revenir au début
                 continue
            
-            print(event.key)
-            print(pygame.K_a, pygame.K_z)
             # chr pour spécifier la lettre correspondant à la touche
             # puis la mettre en minuscule
             letter = chr(event.key).lower()

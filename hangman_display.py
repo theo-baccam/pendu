@@ -60,7 +60,7 @@ class HangmanDisplay:
         screen.blit(self.LOSE_SURFACE, (LOSE_X, LOSE_Y))
         screen.blit(self.solution_surface, (self.solution_x, self.solution_y))
         pygame.display.flip()
-        pygame.time.delay(3000)
+        pygame.time.delay(1800)
         return False
 
     # Fonction pour afficher l'écran win.
@@ -70,7 +70,7 @@ class HangmanDisplay:
         screen.blit(self.WIN_SURFACE, (WIN_X, WIN_Y))
         screen.blit(self.solution_surface, (self.solution_x, self.solution_y))
         pygame.display.flip()
-        pygame.time.delay(3000)
+        pygame.time.delay(1800)
         return False
 
     # Fonction pour afficher l'interface principale
