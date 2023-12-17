@@ -92,7 +92,7 @@ def hangman_play():
             if event.type != pygame.KEYDOWN:
                 continue
 
-            if event.type == pygame.K_BACKSPACE or event.type == pygame.K_ESCAPE:
+            if event.key == pygame.K_BACKSPACE or event.key == pygame.K_ESCAPE:
                 running = False
 
             if not (pygame.K_a <= event.key <= pygame.K_z):
