@@ -1,10 +1,16 @@
 # hangman_display.py
-from hangman_logic import HangmanLogic
-import pygame
+# le module os permet de trouver l'emplacement du repertoire content les fichiers
 import os
+
+# pygame pour l'affichage via interface graphique
+import pygame
+
+# module local pour la logique du jeu
+from hangman_logic import HangmanLogic
 
 
 class HangmanDisplay:
+    # fonction __init__ lorsque la classe est instancié
     def __init__(
         self,
         MAIN_FONT,
@@ -15,18 +21,21 @@ class HangmanDisplay:
         random_word,
         hangman_logic_instance,
     ):
+        # Les surfaces et les textes pour annoncer le résultat de la partie
         self.hl = hangman_logic_instance
         self.LOSE_SURFACE = MAIN_FONT.render("Perdu!", True, FOREGROUND)
 
         self.WIN_SURFACE = MAIN_FONT.render("Gagné!", True, FOREGROUND)
 
         self.solution_surface = MAIN_FONT.render(random_word, True, FOREGROUND)
+        # pour obtenir le millieu d'une surface
         self.solution_center = self.solution_surface.get_width() / 2
         self.solution_x, self.solution_y = (
             HALF_SCREEN_WIDTH - self.solution_center,
             SCREEN_BOTTOM - 30,
         )
 
+        # Les dessins du pendu
         self.image_list = (
             pygame.image.load(
                 os.path.join(hangman_directory, "images", "hangman_0.png")
@@ -54,6 +63,7 @@ class HangmanDisplay:
             ),
         )
 
+    # Fonction pour afficher message si joueur à perdu
     def render_lose_screen(self, screen, HALF_SCREEN_WIDTH, SCREEN_TOP):
         LOSE_CENTER = self.LOSE_SURFACE.get_width() / 2
         LOSE_X, LOSE_Y = (HALF_SCREEN_WIDTH - LOSE_CENTER, SCREEN_TOP)
