@@ -1,4 +1,4 @@
-# game_interface.py
+# hangman_display.py
 from hangman_logic import HangmanLogic
 import pygame
 import os
