@@ -157,7 +157,7 @@ def hangman_add():
                 running = False
 
             # Si entrée est appuyé, ajouter le mot à la liste
-            if event.key == pygame.K_RETURN:
+            if event.key == pygame.K_RETURN and not aw.is_too_short():
                 aw.word_list_append()
                 running = False
 

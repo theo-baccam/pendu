@@ -11,6 +11,10 @@ class AddWord:
         self.word_file = os.path.join(hangman_directory, "mots.txt")
         self.text_field = ""
 
+    def is_too_short(self):
+        if len(self.text_field) == 0:
+            return True
+
     def append_to_text(self, new_letter):
         self.text_field = self.text_field + new_letter
 
