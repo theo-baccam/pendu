@@ -159,6 +159,7 @@ def hangman_add():
             # Si entrée est appuyé, ajouter le mot à la liste
             if event.key == pygame.K_RETURN:
                 aw.word_list_append()
+                running = False
 
             # Pour effacer le dernier caractère
             if event.key == pygame.K_BACKSPACE:
