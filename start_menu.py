@@ -1,48 +1,49 @@
-# start_menu.py
-
-# module pygame pour affichage graphique
 import pygame
 
+from file_functions import font_path
 
-class StartMenu:
-    # fonction lorsqu'une classe est instanciée
-    def __init__(
-        self,
-        MAIN_FONT,
-        FOREGROUND,
-        HALF_SCREEN_WIDTH,
-    ):
-        self.WHITE = (255, 255, 255)
-        self.TITLE_SURFACE = MAIN_FONT.render("Le pendu", True, FOREGROUND)
-        self.TITLE_CENTER = self.TITLE_SURFACE.get_width() / 2
-        self.TITLE_X, self.TITLE_Y = (
-            HALF_SCREEN_WIDTH - self.TITLE_CENTER,
-            144,
-        )
+BACKGROUND_COLOR = (0, 16, 64)
+FOREGROUND_COLOR = (0, 128, 192)
+SELECTION_COLOR = (255, 255, 255)
 
-        # liste + index pour les options du menu
-        self.menu_options = [
-            "Jouer",
-            "Ajouter mot",
-            "Quitter",
-        ]
+pygame.font.init()
 
-    def display_menu(self, screen, MAIN_FONT, FOREGROUND, HALF_SCREEN_WIDTH, selection):
-        option_surfaces = [
-            MAIN_FONT.render(
-                option,
-                True,
-                # Pour changer la couleur de la police si on "hover" dessus l'option
-                self.WHITE if i == selection else FOREGROUND,
-            )
-            for i, option in enumerate(self.menu_options)
-        ]
+FONT_SIZE = 32
+FONT = pygame.font.Font(font_path, FONT_SIZE)
 
-        option_positions = [
-            (HALF_SCREEN_WIDTH - surface.get_width() / 2, 288 + i * 48)
-            for i, surface in enumerate(option_surfaces)
-        ]
 
-        screen.blit(self.TITLE_SURFACE, (self.TITLE_X, self.TITLE_Y))
-        for option, position in zip(option_surfaces, option_positions):
-            screen.blit(option, position)
+selection_value = 0
+
+
+def draw_background(screen):
+    screen.fill(BACKGROUND_COLOR)
+
+
+def draw_title(screen):
+    TITLE_SURFACE = FONT.render("Le pendu", True, FOREGROUND_COLOR)
+    TITLE_MIDDLE = TITLE_SURFACE.get_width() / 2
+    screen.blit(TITLE_SURFACE, (320 - TITLE_MIDDLE, 120))
+
+
+def render_options(screen):
+    NEW_GAME_SURFACE = FONT.render("Jouer", True, FOREGROUND_COLOR)
+    NEW_GAME_MIDDLE = NEW_GAME_SURFACE.get_width() / 2
+
+    ADD_WORD_SURFACE = FONT.render("Ajouter mot", True, FOREGROUND_COLOR)
+    ADD_WORD_MIDDLE = ADD_WORD_SURFACE.get_width() / 2
+
+    QUIT_GAME_SURFACE = FONT.render("Quitter", True, FOREGROUND_COLOR)
+    QUIT_GAME_MIDDLE = QUIT_GAME_SURFACE.get_width() / 2
+
+    if selection_value == 0:
+        NEW_GAME_SURFACE = FONT.render("Jouer", True, SELECTION_COLOR)
+    elif selection_value == 1:
+        ADD_WORD_SURFACE = FONT.render("Ajouter mot", True, SELECTION_COLOR)
+    elif selection_value == 2:
+        QUIT_GAME_SURFACE = FONT.render("Quitter", True, SELECTION_COLOR)
+    else:
+        raise ValueError("Valeur selection invalide")
+
+    screen.blit(NEW_GAME_SURFACE, (320 - NEW_GAME_MIDDLE, 240))
+    screen.blit(ADD_WORD_SURFACE, (320 - ADD_WORD_MIDDLE, 280))
+    screen.blit(QUIT_GAME_SURFACE, (320 - QUIT_GAME_MIDDLE, 320))
