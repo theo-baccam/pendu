@@ -1,7 +1,9 @@
 import pygame
+from functools import partial
 
 import pygame_functions as pf
 import start_menu as sm
+import add_word as aw
 
 
 def new_game():
@@ -14,7 +16,7 @@ def add_word():
 
 available_options = [
     new_game,
-    add_word,
+    partial(aw.add_word, pf.screen),
     pf.pygame_quit,
 ]
 
