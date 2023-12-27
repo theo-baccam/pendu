@@ -3,19 +3,11 @@ from functools import partial
 
 import pygame_functions as pf
 import start_menu as sm
+import hangman_game as hg
 import add_word as aw
 
-
-def new_game():
-    print("new game")
-
-
-def add_word():
-    print("add word")
-
-
 available_options = [
-    new_game,
+    partial(hg.hangman_game, pf.screen),
     partial(aw.add_word, pf.screen),
     pf.pygame_quit,
 ]
