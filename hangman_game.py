@@ -6,19 +6,30 @@ import pygame
 import display_values as dv
 import file_functions as ff
 
-
 pygame.font.init()
 
 MAX_LIFE_COUNT = 7
-life_count = 0
-running = True
+
+
+def word_list_loader():
+    with open(ff.word_file_path, "r") as file:
+        word_list = file.read().split(os.linesep)
+        word_list.pop(-1)
+        return word_list
+
+
+
+
+def word_chooser(word_list):
+    random_word = choice(word_list)
+    return random_word
 
 
 def draw_background(screen):
     screen.fill(dv.BACKGROUND_COLOR)
 
 
-def draw_life_count(screen):
+def draw_life_count(screen, life_count):
     life_count_surface = dv.FONT.render(
         f"{life_count}/{MAX_LIFE_COUNT}",
         True,
@@ -27,7 +38,7 @@ def draw_life_count(screen):
     screen.blit(life_count_surface, (576, 0))
 
 
-def draw_image(screen):
+def draw_image(screen, life_count):
     hangman_center_x, hangman_center_y = (
         ff.image_list[life_count].get_width() / 2,
         ff.image_list[life_count].get_height() / 2,
@@ -41,28 +52,82 @@ def draw_image(screen):
     screen.blit(ff.image_list[life_count], (hangman_x, hangman_y))
 
 
-def input_loop():
-    global life_count
-    global running
-    for event in pygame.event.get():
-        if event.type != pygame.KEYDOWN:
-            continue
+def draw_text_field(screen, text_field):
+    text_field_surface = dv.FONT.render(text_field, True, dv.FOREGROUND_COLOR)
+    text_field_middle = text_field_surface.get_width() / 2
+    screen.blit(text_field_surface, (320 - text_field_middle, 320))
 
-        if event.key == pygame.K_ESCAPE:
-            running = False
 
-        if event.key == pygame.K_UP:
-            life_count += 1
+def draw_used_letters(screen, used_letter_list):
+    used_letters_surface = dv.SECONDARY_FONT.render(" ".join(used_letter_list), True, dv.FOREGROUND_COLOR)
+    used_letters_middle = used_letters_surface.get_width() / 2
+    screen.blit(used_letters_surface, (320 - used_letters_middle, 384))
 
-        if event.key == pygame.K_DOWN:
-            life_count -= 1
 
+def is_letter_in_word(random_word, key_name):
+    in_word = False
+    for letter in random_word:
+        if key_name == letter:
+            in_word = True
+    return in_word
+
+
+def letter_was_used(used_letter_list, key_name):
+    if key_name in used_letter_list:
+        return True
+    else:
+        return False
+
+
+def modify_text_field(random_word, text_field, key_name):
+    for index, letter in enumerate(random_word):
+        if key_name == letter:
+            text_field = text_field[:index] + key_name + text_field[index + 1:]
+
+    return text_field
 
 def hangman_game(screen):
+    running = True
+    life_count = 0
+
+
+    word_list = word_list_loader()
+    used_letter_list = []
+    random_word = word_chooser(word_list)
+    text_field = "_" * len(random_word)
+
     while running:
-        input_loop()
+        for event in pygame.event.get():
+            if event.type != pygame.KEYDOWN:
+                continue
+
+            if event.key == pygame.K_ESCAPE:
+                running = False
+
+            if pygame.K_a <= event.key <= pygame.K_z:
+                key_name = pygame.key.name(event.key)
+                if letter_was_used(used_letter_list, key_name):
+                    continue
+                used_letter_list.append(key_name)
+                used_letter_list.sort()
+
+                if not is_letter_in_word(random_word, key_name):
+                    life_count += 1
+                    continue
+
+                text_field = modify_text_field(random_word, text_field, key_name)
+
+        if life_count == 7:
+            running = False
+        elif text_field == random_word:
+            running = False
+
+
         draw_background(screen)
-        draw_life_count(screen)
-        draw_image(screen)
+        draw_life_count(screen, life_count)
+        draw_image(screen, life_count)
+        draw_text_field(screen, text_field)
+        draw_used_letters(screen, used_letter_list)
 
         pygame.display.flip()
+
