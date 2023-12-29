@@ -86,6 +86,27 @@ def modify_text_field(random_word, text_field, key_name):
 
     return text_field
 
+
+def render_lose_screen(screen, random_word):
+    LOSE_SURFACE = dv.FONT.render("Vous avez perdu!", True, dv.FOREGROUND_COLOR)
+    LOSE_MIDDLE = LOSE_SURFACE.get_width() / 2
+    screen.blit(LOSE_SURFACE, (320 - LOSE_MIDDLE, 160))
+
+    random_word_surface = dv.FONT.render(random_word, True, dv.FOREGROUND_COLOR)
+    random_word_middle = random_word_surface.get_width() / 2
+    screen.blit(random_word_surface, (320 - random_word_middle, 320))
+
+
+def render_win_screen(screen, random_word):
+    WIN_SURFACE = dv.FONT.render("Vous avez gagné!", True, dv.FOREGROUND_COLOR)
+    WIN_MIDDLE = WIN_SURFACE.get_width() / 2
+    screen.blit(WIN_SURFACE, (320 - WIN_MIDDLE, 160))
+
+    random_word_surface = dv.FONT.render(random_word, True, dv.FOREGROUND_COLOR)
+    random_word_middle = random_word_surface.get_width() / 2
+    screen.blit(random_word_surface, (320 - random_word_middle, 320))
+
+
 def hangman_game(screen):
     running = True
     life_count = 0
@@ -117,17 +138,22 @@ def hangman_game(screen):
 
                 text_field = modify_text_field(random_word, text_field, key_name)
 
-        if life_count == 7:
-            running = False
-        elif text_field == random_word:
-            running = False
-
-
         draw_background(screen)
         draw_life_count(screen, life_count)
         draw_image(screen, life_count)
-        draw_text_field(screen, text_field)
         draw_used_letters(screen, used_letter_list)
 
+        if life_count == 7:
+            render_lose_screen(screen, random_word)
+            running = False
+        elif text_field == random_word:
+            render_win_screen(screen, random_word)
+            running = False
+
+        if running:
+            draw_text_field(screen, text_field)
+
         pygame.display.flip()
+        if not running:
+            pygame.time.delay(1800)
 
