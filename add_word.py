@@ -1,48 +1,58 @@
-# add_word.py
 import pygame
-import os
+from os import linesep
+
+import display_values as dv
+from file_functions import word_file_path
+
+MAXIMUM_LENGTH = 32
+text_field = ""
 
 
-class AddWord:
-    def __init__(
-        self,
-        hangman_directory,
-    ):
-        self.word_file = os.path.join(hangman_directory, "mots.txt")
-        self.text_field = ""
+def draw_background(screen):
+    screen.fill(dv.BACKGROUND_COLOR)
 
-    def is_too_short(self):
-        if len(self.text_field) == 0:
-            return True
 
-    def append_to_text(self, new_letter):
-        self.text_field = self.text_field + new_letter
+def draw_text_field(screen):
+    text_field_surface = dv.FONT.render(text_field, True, dv.FOREGROUND_COLOR)
+    text_field_middle = text_field_surface.get_width() / 2
+    screen.blit(text_field_surface, (320 - text_field_middle, 240))
 
-    def return_text(self):
-        self.text_field = self.text_field[:-1]
-    
-    def render_text_field(
-        self,
-        screen,
-        MAIN_FONT,
-        FOREGROUND,
-        HALF_SCREEN_WIDTH,
-        HALF_SCREEN_HEIGHT,
-    ):
-        text_field_surface = MAIN_FONT.render(self.text_field, True, FOREGROUND)
-        text_field_center = text_field_surface.get_width() / 2
-        text_field_x, text_field_y = (
-            HALF_SCREEN_WIDTH - text_field_center,
-            HALF_SCREEN_HEIGHT
-        )
-        screen.blit(text_field_surface, (text_field_x, text_field_y))
 
-    def word_list_append(self):
-        try:
-            with open(self.word_file, "a") as file:
-                new_word = self.text_field + os.linesep
-                file.write(new_word)
-        except FileNotFoundError:
-            with open(self.word_file, "w") as file:
-                file.write("")
-                return []
+def append_to_file():
+    with open(word_file_path, "a") as file:
+        new_word = text_field + linesep
+        file.write(new_word)
+
+
+def input_loop():
+    global running
+    global text_field
+    for event in pygame.event.get():
+        if event.type != pygame.KEYDOWN:
+            continue
+
+        if event.key == pygame.K_ESCAPE:
+            running = False
+
+        if pygame.K_a <= event.key <= pygame.K_z:
+            if len(text_field) == MAXIMUM_LENGTH:
+                continue
+            text_field = text_field + pygame.key.name(event.key)
+
+        if event.key == pygame.K_BACKSPACE:
+            text_field = text_field[:-1]
+
+        if event.key == pygame.K_RETURN:
+            append_to_file()
+            text_field = ""
+
+
+def add_word(screen):
+    global running
+    running = True
+    while running:
+        input_loop()
+        draw_background(screen)
+        draw_text_field(screen)
+
+        pygame.display.flip()
