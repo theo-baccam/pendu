@@ -8,13 +8,12 @@ import file_functions as ff
 
 pygame.font.init()
 
+
 def word_list_loader():
     with open(ff.word_file_path, "r") as file:
         word_list = file.read().split(os.linesep)
         word_list.pop(-1)
         return word_list
-
-
 
 
 def word_chooser(word_list):
@@ -47,7 +46,9 @@ def draw_text_field(screen, text_field):
 
 
 def draw_used_letters(screen, used_letter_list):
-    used_letters_surface = dv.SECONDARY_FONT.render(" ".join(used_letter_list), True, dv.FOREGROUND_COLOR)
+    used_letters_surface = dv.SECONDARY_FONT.render(
+        " ".join(used_letter_list), True, dv.FOREGROUND_COLOR
+    )
     used_letters_middle = used_letters_surface.get_width() / 2
     screen.blit(used_letters_surface, (320 - used_letters_middle, 384))
 
@@ -70,7 +71,7 @@ def letter_was_used(used_letter_list, key_name):
 def modify_text_field(random_word, text_field, key_name):
     for index, letter in enumerate(random_word):
         if key_name == letter:
-            text_field = text_field[:index] + key_name + text_field[index + 1:]
+            text_field = text_field[:index] + key_name + text_field[index + 1 :]
 
     return text_field
 
@@ -78,6 +79,17 @@ def modify_text_field(random_word, text_field, key_name):
 def render_lose_screen(screen, random_word):
     LOSE_SURFACE = dv.FONT.render("Vous avez perdu!", True, dv.FOREGROUND_COLOR)
     LOSE_MIDDLE = LOSE_SURFACE.get_width() / 2
+    LOSE_BACKGROUND_OUTLINE = pygame.Rect(
+        (320 - LOSE_MIDDLE - 8, 208 - 8),
+        (LOSE_SURFACE.get_width() + 16, LOSE_SURFACE.get_height() + 16),
+    )
+    LOSE_BACKGROUND = pygame.Rect(
+        (320 - LOSE_MIDDLE - 7, 208 - 7),
+        (LOSE_SURFACE.get_width() + 14, LOSE_SURFACE.get_height() + 14),
+    )
+
+    pygame.draw.rect(screen, dv.FOREGROUND_COLOR, LOSE_BACKGROUND_OUTLINE)
+    pygame.draw.rect(screen, dv.BACKGROUND_COLOR, LOSE_BACKGROUND)
     screen.blit(LOSE_SURFACE, (320 - LOSE_MIDDLE, 208))
 
     random_word_surface = dv.FONT.render(random_word, True, dv.FOREGROUND_COLOR)
@@ -88,6 +100,17 @@ def render_lose_screen(screen, random_word):
 def render_win_screen(screen, random_word):
     WIN_SURFACE = dv.FONT.render("Vous avez gagné!", True, dv.FOREGROUND_COLOR)
     WIN_MIDDLE = WIN_SURFACE.get_width() / 2
+    WIN_BACKGROUND_OUTLINE = pygame.Rect(
+        (320 - WIN_MIDDLE - 8, 208 - 8),
+        (WIN_SURFACE.get_width() + 16, WIN_SURFACE.get_height() + 16),
+    )
+    WIN_BACKGROUND = pygame.Rect(
+        (320 - WIN_MIDDLE - 7, 208 - 7),
+        (WIN_SURFACE.get_width() + 14, WIN_SURFACE.get_height() + 14),
+    )
+
+    pygame.draw.rect(screen, dv.FOREGROUND_COLOR, WIN_BACKGROUND_OUTLINE)
+    pygame.draw.rect(screen, dv.BACKGROUND_COLOR, WIN_BACKGROUND)
     screen.blit(WIN_SURFACE, (320 - WIN_MIDDLE, 208))
 
     random_word_surface = dv.FONT.render(random_word, True, dv.FOREGROUND_COLOR)
@@ -142,4 +165,3 @@ def hangman_game(screen):
             draw_text_field(screen, text_field)
 
         pygame.display.flip()
-
