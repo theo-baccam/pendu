@@ -2,9 +2,9 @@ import pygame
 
 from file_functions import font_path
 
-BACKGROUND_COLOR = (0, 16, 64)
-FOREGROUND_COLOR = (0, 128, 192)
-SELECTION_COLOR = (255, 255, 255)
+BACKGROUND_COLOR = (39, 41, 70)
+FOREGROUND_COLOR = (237, 160, 49)
+SELECTION_COLOR = (231, 255, 238)
 
 pygame.font.init()
 

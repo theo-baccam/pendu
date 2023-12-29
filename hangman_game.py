@@ -8,9 +8,6 @@ import file_functions as ff
 
 pygame.font.init()
 
-MAX_LIFE_COUNT = 7
-
-
 def word_list_loader():
     with open(ff.word_file_path, "r") as file:
         word_list = file.read().split(os.linesep)
@@ -27,15 +24,6 @@ def word_chooser(word_list):
 
 def draw_background(screen):
     screen.fill(dv.BACKGROUND_COLOR)
-
-
-def draw_life_count(screen, life_count):
-    life_count_surface = dv.FONT.render(
-        f"{life_count}/{MAX_LIFE_COUNT}",
-        True,
-        dv.FOREGROUND_COLOR
-    )
-    screen.blit(life_count_surface, (576, 0))
 
 
 def draw_image(screen, life_count):
@@ -90,7 +78,7 @@ def modify_text_field(random_word, text_field, key_name):
 def render_lose_screen(screen, random_word):
     LOSE_SURFACE = dv.FONT.render("Vous avez perdu!", True, dv.FOREGROUND_COLOR)
     LOSE_MIDDLE = LOSE_SURFACE.get_width() / 2
-    screen.blit(LOSE_SURFACE, (320 - LOSE_MIDDLE, 160))
+    screen.blit(LOSE_SURFACE, (320 - LOSE_MIDDLE, 208))
 
     random_word_surface = dv.FONT.render(random_word, True, dv.FOREGROUND_COLOR)
     random_word_middle = random_word_surface.get_width() / 2
@@ -100,7 +88,7 @@ def render_lose_screen(screen, random_word):
 def render_win_screen(screen, random_word):
     WIN_SURFACE = dv.FONT.render("Vous avez gagné!", True, dv.FOREGROUND_COLOR)
     WIN_MIDDLE = WIN_SURFACE.get_width() / 2
-    screen.blit(WIN_SURFACE, (320 - WIN_MIDDLE, 160))
+    screen.blit(WIN_SURFACE, (320 - WIN_MIDDLE, 208))
 
     random_word_surface = dv.FONT.render(random_word, True, dv.FOREGROUND_COLOR)
     random_word_middle = random_word_surface.get_width() / 2
@@ -109,8 +97,9 @@ def render_win_screen(screen, random_word):
 
 def hangman_game(screen):
     running = True
-    life_count = 0
 
+    MAX_LIFE_COUNT = 7
+    life_count = 0
 
     word_list = word_list_loader()
     used_letter_list = []
@@ -124,6 +113,9 @@ def hangman_game(screen):
 
             if event.key == pygame.K_ESCAPE:
                 running = False
+
+            if life_count == 7 or text_field == random_word:
+                continue
 
             if pygame.K_a <= event.key <= pygame.K_z:
                 key_name = pygame.key.name(event.key)
@@ -139,21 +131,15 @@ def hangman_game(screen):
                 text_field = modify_text_field(random_word, text_field, key_name)
 
         draw_background(screen)
-        draw_life_count(screen, life_count)
         draw_image(screen, life_count)
         draw_used_letters(screen, used_letter_list)
 
         if life_count == 7:
             render_lose_screen(screen, random_word)
-            running = False
         elif text_field == random_word:
             render_win_screen(screen, random_word)
-            running = False
-
-        if running:
+        else:
             draw_text_field(screen, text_field)
 
         pygame.display.flip()
-        if not running:
-            pygame.time.delay(1800)
 
