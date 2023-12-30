@@ -53,6 +53,22 @@ def draw_used_letters(screen, used_letter_list):
     screen.blit(used_letters_surface, (320 - used_letters_middle, 384))
 
 
+def draw_hints(screen):
+    LETTER_HINT = dv.SECONDARY_FONT.render(
+        "Propose une lettre",
+        True,
+        dv.FOREGROUND_COLOR
+    )
+    screen.blit(LETTER_HINT, (18, 18))
+
+    QUIT_HINT = dv.SECONDARY_FONT.render(
+        "ESC pour quitter",
+        True,
+        dv.FOREGROUND_COLOR
+    )
+    screen.blit(QUIT_HINT, (18, 36))
+
+
 def is_letter_in_word(random_word, key_name):
     in_word = False
     for letter in random_word:
@@ -156,6 +172,7 @@ def hangman_game(screen):
         draw_background(screen)
         draw_image(screen, life_count)
         draw_used_letters(screen, used_letter_list)
+        draw_hints(screen)
 
         if life_count == 7:
             render_lose_screen(screen, random_word)

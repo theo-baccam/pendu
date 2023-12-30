@@ -29,9 +29,7 @@ while pf.running:
         if event.key == pygame.K_RETURN:
             available_options[sm.selection_value]()
 
-    sm.draw_background(pf.screen)
-    sm.draw_title(pf.screen)
-    sm.render_options(pf.screen)
+    sm.start_menu(pf.screen)
     pygame.display.flip()
 
 pf.pygame_quit()

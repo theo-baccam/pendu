@@ -5,7 +5,7 @@ import pygame
 
 hangman_directory = os.path.dirname(os.path.abspath(__file__))
 
-font_path = os.path.join(hangman_directory, "NotoSansMono-Regular.ttf")
+font_path = os.path.join(hangman_directory, "DejaVuSansMono.ttf")
 
 word_file_path = os.path.join(hangman_directory, "mots.txt")
 
