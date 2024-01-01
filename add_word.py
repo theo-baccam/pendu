@@ -1,23 +1,28 @@
-import pygame
 from os import linesep
+
+import pygame
 
 import display_values as dv
 from file_functions import word_file_path
 
+# Constant pour la longueur maximal d'un mot
 MAXIMUM_LENGTH = 32
 text_field = ""
 
 
+# Fonction pour afficher le fond
 def draw_background(screen):
     screen.fill(dv.BACKGROUND_COLOR)
 
 
+# Fonction pour afficher le champ de saisie
 def draw_text_field(screen):
     text_field_surface = dv.FONT.render(text_field, True, dv.FOREGROUND_COLOR)
     text_field_middle = text_field_surface.get_width() / 2
     screen.blit(text_field_surface, (320 - text_field_middle, 240))
 
 
+# Fonction pour afficher les contrôles
 def draw_hints(screen):
     TEXT_HINT_SURFACE = dv.SECONDARY_FONT.render(
         "Donne un mot",
@@ -41,12 +46,14 @@ def draw_hints(screen):
     screen.blit(QUIT_HINT_SURFACE, (18, 54))
 
 
+# Fonction pour ajouter le nouveau mot au fichier mots.txt
 def append_to_file():
     with open(word_file_path, "a") as file:
         new_word = text_field + linesep
         file.write(new_word)
 
 
+# Fonction pour la boucle event.get
 def input_loop():
     global running
     global text_field

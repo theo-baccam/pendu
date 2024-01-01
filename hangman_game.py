@@ -1,4 +1,3 @@
-import os
 from random import choice
 
 import pygame
@@ -9,22 +8,28 @@ import file_functions as ff
 pygame.font.init()
 
 
+# Fonction pour extraire les contenus de mots.txt
+# dans une liste
 def word_list_loader():
     with open(ff.word_file_path, "r") as file:
-        word_list = file.read().split(os.linesep)
+        word_list = file.read().splitlines()
+        # On enlève le dernière élément de la liste puisque c'est blank
         word_list.pop(-1)
         return word_list
 
 
+# Fonction pour choisir aléatoirement un mot dans la liste
 def word_chooser(word_list):
     random_word = choice(word_list)
     return random_word
 
 
+# Fonction pour afficher le fond
 def draw_background(screen):
     screen.fill(dv.BACKGROUND_COLOR)
 
 
+# Fonction pour afficher le pendu selon le compteur
 def draw_image(screen, life_count):
     hangman_center_x, hangman_center_y = (
         ff.image_list[life_count].get_width() / 2,
@@ -39,12 +44,14 @@ def draw_image(screen, life_count):
     screen.blit(ff.image_list[life_count], (hangman_x, hangman_y))
 
 
+# Fonction pour afficher le champ de saisie
 def draw_text_field(screen, text_field):
     text_field_surface = dv.FONT.render(text_field, True, dv.FOREGROUND_COLOR)
     text_field_middle = text_field_surface.get_width() / 2
     screen.blit(text_field_surface, (320 - text_field_middle, 320))
 
 
+# Fonction pour afficher les lettres utilisés
 def draw_used_letters(screen, used_letter_list):
     used_letters_surface = dv.SECONDARY_FONT.render(
         " ".join(used_letter_list), True, dv.FOREGROUND_COLOR
@@ -53,6 +60,7 @@ def draw_used_letters(screen, used_letter_list):
     screen.blit(used_letters_surface, (320 - used_letters_middle, 384))
 
 
+# Fonction pour afficher texte indiquant les contrôles
 def draw_hints(screen):
     LETTER_HINT = dv.SECONDARY_FONT.render(
         "Propose une lettre",
@@ -69,6 +77,7 @@ def draw_hints(screen):
     screen.blit(QUIT_HINT, (18, 36))
 
 
+# Fonction pour vérifier si la lettre que le jouer à proposé est dans le mot
 def is_letter_in_word(random_word, key_name):
     in_word = False
     for letter in random_word:
@@ -77,6 +86,7 @@ def is_letter_in_word(random_word, key_name):
     return in_word
 
 
+# Fonction pour déterminer si la lettre à déjà été proposé
 def letter_was_used(used_letter_list, key_name):
     if key_name in used_letter_list:
         return True
@@ -84,6 +94,7 @@ def letter_was_used(used_letter_list, key_name):
         return False
 
 
+# Fonction pour modifier la zone de texte pour réveler les lettres.
 def modify_text_field(random_word, text_field, key_name):
     for index, letter in enumerate(random_word):
         if key_name == letter:
@@ -92,6 +103,7 @@ def modify_text_field(random_word, text_field, key_name):
     return text_field
 
 
+# Fonction pour afficher l'écran game over
 def render_lose_screen(screen, random_word):
     LOSE_SURFACE = dv.FONT.render("Vous avez perdu!", True, dv.FOREGROUND_COLOR)
     LOSE_MIDDLE = LOSE_SURFACE.get_width() / 2
@@ -113,6 +125,7 @@ def render_lose_screen(screen, random_word):
     screen.blit(random_word_surface, (320 - random_word_middle, 320))
 
 
+# Fonction pour afficher l'écran au cas où le joueur gagne
 def render_win_screen(screen, random_word):
     WIN_SURFACE = dv.FONT.render("Vous avez gagné!", True, dv.FOREGROUND_COLOR)
     WIN_MIDDLE = WIN_SURFACE.get_width() / 2
@@ -134,6 +147,7 @@ def render_win_screen(screen, random_word):
     screen.blit(random_word_surface, (320 - random_word_middle, 320))
 
 
+# Fonction principale pour commencer une partie de pendu
 def hangman_game(screen):
     running = True
 
