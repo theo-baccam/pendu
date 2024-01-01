@@ -50,16 +50,12 @@ def render_options(screen):
 # Fonction pour afficher le texte indiquant les contrôles
 def draw_hints(screen):
     ARROW_HINT_SURFACE_1 = dv.SECONDARY_FONT.render(
-        "\u2191 et \u2193 pour naviguer",
-        True,
-        dv.FOREGROUND_COLOR
+        "\u2191 et \u2193 pour naviguer", True, dv.FOREGROUND_COLOR
     )
     screen.blit(ARROW_HINT_SURFACE_1, (18, 18))
 
     ENTER_HINT = dv.SECONDARY_FONT.render(
-        "\u23CE pour confirmer",
-        True,
-        dv.FOREGROUND_COLOR
+        "\u23CE pour confirmer", True, dv.FOREGROUND_COLOR
     )
 
     screen.blit(ENTER_HINT, (18, 36))

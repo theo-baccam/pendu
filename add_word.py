@@ -25,23 +25,17 @@ def draw_text_field(screen):
 # Fonction pour afficher les contrôles
 def draw_hints(screen):
     TEXT_HINT_SURFACE = dv.SECONDARY_FONT.render(
-        "Donne un mot",
-        True,
-        dv.FOREGROUND_COLOR
+        "Donne un mot", True, dv.FOREGROUND_COLOR
     )
     screen.blit(TEXT_HINT_SURFACE, (18, 18))
 
     ENTER_HINT_SURFACE = dv.SECONDARY_FONT.render(
-        "Ajoute le avec \u23CE",
-        True,
-        dv.FOREGROUND_COLOR
+        "Ajoute le avec \u23CE", True, dv.FOREGROUND_COLOR
     )
     screen.blit(ENTER_HINT_SURFACE, (18, 36))
 
     QUIT_HINT_SURFACE = dv.SECONDARY_FONT.render(
-        "ESC pour quitter",
-        True,
-        dv.FOREGROUND_COLOR
+        "ESC pour quitter", True, dv.FOREGROUND_COLOR
     )
     screen.blit(QUIT_HINT_SURFACE, (18, 54))
 

@@ -63,17 +63,11 @@ def draw_used_letters(screen, used_letter_list):
 # Fonction pour afficher texte indiquant les contrôles
 def draw_hints(screen):
     LETTER_HINT = dv.SECONDARY_FONT.render(
-        "Propose une lettre",
-        True,
-        dv.FOREGROUND_COLOR
+        "Propose une lettre", True, dv.FOREGROUND_COLOR
     )
     screen.blit(LETTER_HINT, (18, 18))
 
-    QUIT_HINT = dv.SECONDARY_FONT.render(
-        "ESC pour quitter",
-        True,
-        dv.FOREGROUND_COLOR
-    )
+    QUIT_HINT = dv.SECONDARY_FONT.render("ESC pour quitter", True, dv.FOREGROUND_COLOR)
     screen.blit(QUIT_HINT, (18, 36))
 
 
